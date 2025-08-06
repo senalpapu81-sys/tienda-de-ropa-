@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sun&Style - Venta de Prendas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <style>
+        :root {
+            --dark-bg: #1a1a2e;
+            --darker-bg: #16213e;
+            --accent-color: #FF7F50;
+            --highlight: #FF6347;
+            --text-color: #f1f1f1;
+            --text-muted: #b8b8b8;
+            --gradient: linear-gradient(135deg, #FF7F50 0%, #FF6347 100%);
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            min-height: 100vh;
+            background-image: url('https://images.unsplash.com/photo-1558769132-cb1aea458c5e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            background-blend-mode: overlay;
+        }
+        
+        .main-container {
+            background-color: rgba(22, 33, 62, 0.9);
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background-color: var(--darker-bg) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-brand span {
+            color: var(--highlight);
+        }
+        
+        .btn-primary {
+            background: var(--gradient);
+            border: none;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #FF6347 0%, #FF4500 100%);
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline-primary {
+            color: var(--highlight);
+            border-color: var(--highlight);
+        }
+        
+        .btn-outline-primary:hover {
+            background: var(--gradient);
+            color: white;
+            border-color: transparent;
+        }
+        
+        .card {
+            background-color: rgba(26, 26, 46, 0.8);
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+        
+        .card-img-top {
+            height: 220px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .card:hover .card-img-top {
+            transform: scale(1.05);
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .card-title {
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 0.75rem;
+            font-size: 1.2rem;
+        }
+        
+        .card-text {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .badge {
+            background: var(--gradient);
+            color: white;
+            font-weight: 500;
+            margin-right: 5px;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+        
+        .price-tag {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--highlight);
+        }
+        
+        .modal-content {
+            background-color: var(--darker-bg);
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .modal-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-title {
+            color: var(--text-color);
+            font-weight: 600;
+        }
+        
+        .form-control, .form-select {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-color);
+            padding: 10px 15px;
+            border-radius: 8px;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-color: var(--highlight);
+            color: var(--text-color);
+            box-shadow: 0 0 0 0.25rem rgba(255, 99, 71, 0.25);
+        }
+        
+        .form-label {
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .qr-container, .barcode-container {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .tag-selector .btn {
+            margin: 3px;
+            border-radius: 20px;
+            padding: 5px 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .tag-selector .btn.active {
+            background: var(--gradient);
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        #prendaImagePreview {
+            max-height: 220px;
+            object-fit: contain;
+            margin-top: 15px;
+            display: none;
+            border-radius: 10px;
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .toast {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 9999;
+            background-color: var(--darker-bg);
+            color: white;
+            border-left: 4px solid var(--highlight);
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--text-muted);
+            background: rgba(26, 26, 46, 0.5);
+            border-radius: 15px;
+            margin-top: 30px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .empty-state i {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .empty-state h4 {
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .section-title {
+            position: relative;
+            margin-bottom: 30px;
+            font-weight: 700;
+            display: inline-block;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 3px;
+        }
+        
+        .hero-section {
+            padding: 80px 0;
+            text-align: center;
+            margin-bottom: 50px;
+            background: rgba(22, 33, 62, 0.7);
+            border-radius: 0 0 20px 20px;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #FF7F50 0%, #FF6347 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--highlight);
+        }
+        
+        .feature-card {
+            padding: 30px;
+            border-radius: 15px;
+            background: rgba(26, 26, 46, 0.6);
+            height: 100%;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(26, 26, 46, 0.8);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .footer {
+            background: var(--darker-bg);
+            padding: 30px 0;
+            margin-top: 80px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .social-icons a {
+            color: var(--text-muted);
+            font-size: 1.3rem;
+            margin-right: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            color: var(--highlight);
+            transform: translateY(-3px);
+        }
+        
+        .custom-file-upload {
+            display: inline-block;
+            padding: 10px 20px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            border-radius: 8px;
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .custom-file-upload:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--highlight);
+        }
+        
+        .custom-file-upload i {
+            margin-right: 8px;
+        }
+        
+        .search-bar {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .search-bar input {
+            padding-left: 45px;
+            background: rgba(255, 255, 255, 0.1) !important;
+            border: none !important;
+        }
+        
+        .search-bar i {
+            position: absolute;
+            left: 15px;
+            top: 12px;
+            color: var(--text-muted);
+        }
+        
+        .floating-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 20px rgba(255, 99, 71, 0.4);
+            z-index: 99;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .floating-btn:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 99, 71, 0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <i class="fas fa-sun me-2"></i>Sun<span>&</span>Style
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <div class="user-info">
+                                <div class="user-avatar" id="userAvatar">U</div>
+                                <span id="usernameDisplay">Usuario</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <h1 class="hero-title">Sun&Style</h1>
+                <p class="hero-subtitle">Descubre y comparte las mejores prendas de moda con nuestra comunidad. Vende tus looks favoritos con facilidad.</p>
+                <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#addPrendaModal">
+                    <i class="fas fa-plus me-2"></i>Agregar Prenda
+                </button>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <div class="container my-5">
+            <div class="row mb-5">
+                <div class="col-12">
+                    <h2 class="section-title fw-bold">Catálogo de Prendas</h2>
+                    
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" class="form-control" id="searchInput" placeholder="Buscar prendas...">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row" id="prendasContainer">
+                <!-- Las prendas se cargarán aquí dinámicamente -->
+                <div class="col-12 empty-state">
+                    <i class="fas fa-box-open"></i>
+                    <h4>No hay prendas disponibles</h4>
+                    <p>Agrega tu primera prenda haciendo clic en el botón "Agregar Prenda"</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <section class="container my-5 py-5">
+            <div class="row">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="section-title">¿Por qué usar Sun&Style?</h2>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h4>Fácil de usar</h4>
+                        <p class="text-muted">Agrega tus prendas en minutos con nuestro formulario intuitivo y sencillo.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h4>Comparte con todos</h4>
+                        <p class="text-muted">Tus prendas son visibles para cualquier persona con el enlace, en tiempo real.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-qrcode"></i>
+                        </div>
+                        <h4>Códigos QR y Barras</h4>
+                        <p class="text-muted">Genera automáticamente códigos QR y de barras para cada prenda.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4><i class="fas fa-sun me-2"></i>Sun&Style</h4>
+                        <p class="text-muted">La mejor plataforma para compartir y vender tus prendas de moda.</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <div class="social-icons">
+                            <a href="#"><i class="fab fa-facebook"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-tiktok"></i></a>
+                        </div>
+                        <p class="text-muted mt-3">© 2023 Sun&Style. Todos los derechos reservados.</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal para agregar prenda -->
+    <div class="modal fade" id="addPrendaModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Agregar Nueva Prenda</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="prendaForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="prendaNombre" class="form-label">Nombre de la Prenda</label>
+                                    <input type="text" class="form-control" id="prendaNombre" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="prendaDescripcion" class="form-label">Descripción</label>
+                                    <textarea class="form-control" id="prendaDescripcion" rows="3" required></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="prendaPrecio" class="form-label">Precio (USD)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" step="0.01" class="form-control" id="prendaPrecio" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Tallas Disponibles</label>
+                                    <div class="tag-selector">
+                                        <button type="button" class="btn btn-sm btn-outline-primary tag-btn" data-tag="XS">XS</button>
+                                        <button type="button" class="btn btn-sm btn-outline-primary tag-btn" data-tag="S">S</button>
+                                        <button type="button" class="btn btn-sm btn-outline-primary tag-btn" data-tag="M">M</button>
+                                        <button type="button" class="btn btn-sm btn-outline-primary tag-btn" data-tag="L">L</button>
+                                        <button type="button" class="btn btn-sm btn-outline-primary tag-btn" data-tag="XL">XL</button>
+                                        <button type="button" class="btn btn-sm btn-outline-primary tag-btn" data-tag="XXL">XXL</button>
+                                        <button type="button" class="btn btn-sm btn-outline-primary tag-btn" data-tag="Única">Única</button>
+                                    </div>
+                                    <input type="hidden" id="prendaTallas">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Imagen de la Prenda</label>
+                                    <label for="prendaImagen" class="custom-file-upload">
+                                        <i class="fas fa-cloud-upload-alt"></i> Seleccionar Imagen
+                                    </label>
+                                    <input class="form-control d-none" type="file" id="prendaImagen" accept="image/*" required>
+                                    <img id="prendaImagePreview" class="img-fluid rounded mt-3">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="prendaCategoria" class="form-label">Categoría</label>
+                                    <select class="form-select" id="prendaCategoria">
+                                        <option value="Camisetas">Camisetas</option>
+                                        <option value="Pantalones">Pantalones</option>
+                                        <option value="Vestidos">Vestidos</option>
+                                        <option value="Chaquetas">Chaquetas</option>
+                                        <option value="Zapatos">Zapatos</option>
+                                        <option value="Accesorios">Accesorios</option>
+                                        <option value="Otros">Otros</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="prendaColor" class="form-label">Color Principal</label>
+                                    <input type="color" class="form-control form-control-color" id="prendaColor" value="#ff6347" title="Elige un color">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="savePrendaBtn">
+                        <i class="fas fa-save me-2"></i>Guardar Prenda
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para ver detalles de prenda -->
+    <div class="modal fade" id="prendaDetailModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailModalTitle">Detalles de la Prenda</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img id="detailPrendaImage" class="img-fluid rounded mb-3" src="">
+                            <div class="d-flex flex-wrap mb-3" id="detailTallasContainer"></div>
+                            <p id="detailDescripcion" class="text-muted"></p>
+                            <div class="d-flex align-items-center mb-3">
+                                <span class="me-2"><strong>Categoría:</strong></span>
+                                <span class="badge" id="detailCategoria"></span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <span class="me-2"><strong>Color:</strong></span>
+                                <div id="detailColor" style="width: 20px; height: 20px; border-radius: 50%; border: 1px solid #fff;"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4 class="price-tag mb-3" id="detailPrecio"></h4>
+                            <p><strong>Vendedor:</strong> <span id="detailVendedor"></span></p>
+                            <p><strong>Fecha:</strong> <span id="detailFecha"></span></p>
+                            
+                            <div class="mt-4">
+                                <h6><i class="fas fa-qrcode me-2"></i>Código QR</h6>
+                                <div class="qr-container">
+                                    <div id="qrCode"></div>
+                                </div>
+                                <p class="text-muted small text-center mt-2">Escanea este código para ver los detalles de la prenda</p>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <h6><i class="fas fa-barcode me-2"></i>Código de Barras</h6>
+                                <div class="barcode-container">
+                                    <svg id="barcode"></svg>
+                                </div>
+                                <p class="text-muted small text-center mt-2">ID de producto: <span id="detailId"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para nombre de usuario -->
+    <div class="modal fade" id="usernameModal" tabindex="-1" aria-hidden="false" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Bienvenido a Sun&Style</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="usernameInput" class="form-label">Nombre de Usuario</label>
+                        <input type="text" class="form-control" id="usernameInput" placeholder="Ej: ModaFashion" required>
+                        <small class="text-muted">Este nombre se mostrará como vendedor de tus prendas.</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="saveUsernameBtn">
+                        <i class="fas fa-check me-2"></i>Continuar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true" id="notificationToast">
+        <div class="d-flex">
+            <div class="toast-body" id="toastMessage"></div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button class="floating-btn" data-bs-toggle="modal" data-bs-target="#addPrendaModal">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+" crossorigin="anonymous"></script>
+    <script src="js/app.js" defer></script>
+</body>
+</html>
